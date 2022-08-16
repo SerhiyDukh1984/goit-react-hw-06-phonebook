@@ -2,12 +2,18 @@ import { useState } from 'react';
 import { addContact } from '../../Redux/contacts/contacts-actions';
 import { useDispatch, useSelector } from 'react-redux';
 import s from './ContactForm.module.css';
+import { useEffect } from 'react';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.items);
+  console.log('🚀 ~ contacts', contacts);
+
+  useEffect(() => {
+    window.localStorage.setItem('contacts', JSON.stringify([...contacts]));
+  }, [contacts]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -31,6 +37,10 @@ const ContactForm = () => {
       return alert(`${name} is already in contacts.`);
 
     dispatch(addContact({ name: name, number: number }));
+    // window.localStorage.setItem(
+    //   'contacts',
+    //   JSON.stringify([...contacts])
+    // );
 
     reset();
   };
